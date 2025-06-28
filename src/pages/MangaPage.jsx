@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet"; // ← Qo‘shildi
 import { supabase } from "../api/supabaseClient";
-import "../styles/manga-page.css";
 
 const MangaPage = () => {
    const { slug } = useParams();
@@ -20,7 +20,7 @@ const MangaPage = () => {
             .single();
 
          if (mangaError) {
-            console.error("❌ Manga olishda xato:", mangaError.message);
+            console.error("Manga olishda xato:", mangaError.message);
             setLoading(false);
             return;
          }
@@ -34,7 +34,7 @@ const MangaPage = () => {
             .order("number", { ascending: true });
 
          if (chapterError) {
-            console.error("❌ Boblarni olishda xato:", chapterError.message);
+            console.error("Chapter olishda xato:", chapterError.message);
          } else {
             setChapters(chapterData || []);
          }
@@ -45,39 +45,55 @@ const MangaPage = () => {
       fetchMangaAndChapters();
    }, [slug]);
 
-   if (loading) return <div className="loading">⏳ Yuklanmoqda...</div>;
-   if (!manga) return <div className="loading">❌ Manga topilmadi.</div>;
+   if (loading) return <p>Yuklanmoqda...</p>;
+   if (!manga) return <p>Manga topilmadi.</p>;
 
    return (
-      <div className="manga-detail-page">
-         <div className="manga-top">
-            <img src={manga.cover_url} alt={manga.title} />
-            <div className="manga-meta">
-               <h1>{manga.title}</h1>
-               <p className="status">{manga.status}</p>
-               <p className="description">{manga.description}</p>
-               {manga.genres && (
-                  <div className="genres">
-                     {manga.genres.map((g, i) => (
-                        <span key={i}>#{g}</span>
-                     ))}
-                  </div>
-               )}
-            </div>
-         </div>
+      <div style={{ padding: "20px" }}>
+         <Helmet>
+            <title>{manga.title} | Real Manga</title>
+            <meta name="description" content={manga.description.slice(0, 160)} />
+            <meta property="og:title" content={manga.title} />
+            <meta property="og:description" content={manga.description.slice(0, 160)} />
+            <meta property="og:image" content={manga.cover_url} />
+            <meta property="og:url" content={`https://real-manga-front.vercel.app/manga/${slug}`} />
+            <meta name="twitter:card" content="summary_large_image" />
+         </Helmet>
 
-         <h2 className="chapter-heading">📚 Boblar</h2>
-         <div className="chapter-list">
-            {chapters.map((ch) => (
-               <Link
-                  to={`/manga/${slug}/${ch.slug}`}
-                  key={ch.id}
-                  className="chapter-btn"
-               >
-                  {ch.number}-bob
-               </Link>
-            ))}
-         </div>
+         <h1>{manga.title}</h1>
+         <img
+            src={manga.cover_url}
+            alt={manga.title}
+            style={{ maxWidth: "300px", marginBottom: "20px" }}
+         />
+         <p><strong>Status:</strong> {manga.status}</p>
+         <p><strong>Tavsif:</strong> {manga.description}</p>
+
+         {manga.genres && (
+            <p>
+               <strong>Janrlar:</strong>{" "}
+               {manga.genres.map((genre, i) => (
+                  <span key={i} style={{ marginRight: "8px" }}>
+                     #{genre}
+                  </span>
+               ))}
+            </p>
+         )}
+
+         <h2 style={{ marginTop: "30px" }}>Boblar:</h2>
+         {chapters.length > 0 ? (
+            <ul>
+               {chapters.map((chapter) => (
+                  <li key={chapter.id}>
+                     <Link to={`/manga/${slug}/${chapter.slug}`}>
+                        {chapter.number} - {chapter.title}
+                     </Link>
+                  </li>
+               ))}
+            </ul>
+         ) : (
+            <p>Boblar yo‘q</p>
+         )}
       </div>
    );
 };

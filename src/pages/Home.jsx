@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { supabase } from "../api/supabaseClient";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import "../styles/home.css";
 
 const Home = () => {
@@ -7,21 +9,38 @@ const Home = () => {
 
    useEffect(() => {
       const fetchManga = async () => {
-         try {
-            const res = await fetch("https://real-manga-back.onrender.com/api/manga");
-            const data = await res.json();
+         const { data, error } = await supabase
+            .from("manga")
+            .select("id, title, slug, cover_url");
+
+         if (error) {
+            console.error("❌ Manga olishda xatolik:", error.message);
+         } else {
             setMangaList(data);
-         } catch (err) {
-            console.error("❌ Ma'lumot olishda xato:", err);
          }
       };
 
       fetchManga();
    }, []);
 
-
    return (
       <div className="home-container">
+         <Helmet>
+            <title>Real Manga | Eng so‘nggi manga va manhwa</title>
+            <meta
+               name="description"
+               content="Real Manga saytida eng so‘nggi manga, manhwa va webtoonlarni o‘qing! O‘zbek tilida tarjimalar, yaxshi interfeys va doimiy yangiliklar."
+            />
+            <meta property="og:title" content="Real Manga | Eng so‘nggi manga va manhwa" />
+            <meta
+               property="og:description"
+               content="Real Manga saytida eng mashhur va yangi manga, manhwa va webtoonlarni o‘qing. O‘zbek tilida tezkor tarjimalar va to‘liq kutubxona!"
+            />
+            <meta property="og:image" content={mangaList[0]?.cover_url || "/default-cover.jpg"} />
+            <meta property="og:url" content="https://real-manga-front.vercel.app/" />
+            <meta name="twitter:card" content="summary_large_image" />
+         </Helmet>
+
          <h1 className="home-title">📚 Manga & Manhwa Kutubxonasi</h1>
 
          <div className="manga-grid">
