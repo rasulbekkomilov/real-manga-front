@@ -1,26 +1,24 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../api/supabaseClient";
 import { Link } from "react-router-dom";
-import "../styles/home.css"; // CSS faylini alohida yozamiz quyida
+import "../styles/home.css";
 
 const Home = () => {
    const [mangaList, setMangaList] = useState([]);
 
    useEffect(() => {
       const fetchManga = async () => {
-         const { data, error } = await supabase
-            .from("manga")
-            .select("id, title, slug, cover_url");
-
-         if (error) {
-            console.error("❌ Manga olishda xatolik:", error.message);
-         } else {
+         try {
+            const res = await fetch("https://real-manga-back.onrender.com/api/manga");
+            const data = await res.json();
             setMangaList(data);
+         } catch (err) {
+            console.error("❌ Ma'lumot olishda xato:", err);
          }
       };
 
       fetchManga();
    }, []);
+
 
    return (
       <div className="home-container">
