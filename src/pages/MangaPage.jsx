@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet"; // ← Qo‘shildi
 import { supabase } from "../api/supabaseClient";
+import "../styles/manga-page.css"; // CSS alohida faylda
+import { Helmet } from "react-helmet-async";
 
 const MangaPage = () => {
    const { slug } = useParams();
@@ -45,55 +46,45 @@ const MangaPage = () => {
       fetchMangaAndChapters();
    }, [slug]);
 
-   if (loading) return <p>Yuklanmoqda...</p>;
-   if (!manga) return <p>Manga topilmadi.</p>;
+   if (loading) return <p className="loading">⏳ Yuklanmoqda...</p>;
+   if (!manga) return <p className="loading">❌ Manga topilmadi</p>;
 
    return (
-      <div style={{ padding: "20px" }}>
-         <Helmet>
-            <title>{manga.title} | Real Manga</title>
-            <meta name="description" content={manga.description.slice(0, 160)} />
-            <meta property="og:title" content={manga.title} />
-            <meta property="og:description" content={manga.description.slice(0, 160)} />
-            <meta property="og:image" content={manga.cover_url} />
-            <meta property="og:url" content={`https://real-manga-front.vercel.app/manga/${slug}`} />
-            <meta name="twitter:card" content="summary_large_image" />
-         </Helmet>
+      <div className="manga-page-container">
+         <Helmet><title>{manga.title} - Real Manga</title></Helmet>
+         <div className="manga-header">
+            <img src={manga.cover_url} alt={manga.title} className="manga-cover" />
+            <div className="manga-info">
+               <h1 className="manga-title">{manga.title}</h1>
+               <p className="manga-description">{manga.description}</p>
+               <p><strong>Status:</strong> {manga.status}</p>
+               {manga.genres && (
+                  <div className="manga-genres">
+                     {manga.genres.map((genre, i) => (
+                        <span key={i} className="genre-badge">#{genre}</span>
+                     ))}
+                  </div>
+               )}
+            </div>
+         </div>
 
-         <h1>{manga.title}</h1>
-         <img
-            src={manga.cover_url}
-            alt={manga.title}
-            style={{ maxWidth: "300px", marginBottom: "20px" }}
-         />
-         <p><strong>Status:</strong> {manga.status}</p>
-         <p><strong>Tavsif:</strong> {manga.description}</p>
-
-         {manga.genres && (
-            <p>
-               <strong>Janrlar:</strong>{" "}
-               {manga.genres.map((genre, i) => (
-                  <span key={i} style={{ marginRight: "8px" }}>
-                     #{genre}
-                  </span>
-               ))}
-            </p>
-         )}
-
-         <h2 style={{ marginTop: "30px" }}>Boblar:</h2>
-         {chapters.length > 0 ? (
-            <ul>
-               {chapters.map((chapter) => (
-                  <li key={chapter.id}>
-                     <Link to={`/manga/${slug}/${chapter.slug}`}>
-                        {chapter.number} - {chapter.title}
-                     </Link>
-                  </li>
-               ))}
-            </ul>
-         ) : (
-            <p>Boblar yo‘q</p>
-         )}
+         <h2 className="chapter-list-title">📖 Boblar</h2>
+         <div className="chapter-list">
+            {chapters.length > 0 ? (
+               chapters.map((chapter) => (
+                  <Link
+                     to={`/manga/${slug}/${chapter.slug}`}
+                     key={chapter.id}
+                     className="chapter-card"
+                  >
+                     <div className="chapter-number">Bob {chapter.number}</div>
+                     <div className="chapter-title">{chapter.title}</div>
+                  </Link>
+               ))
+            ) : (
+               <p>Boblar topilmadi.</p>
+            )}
+         </div>
       </div>
    );
 };

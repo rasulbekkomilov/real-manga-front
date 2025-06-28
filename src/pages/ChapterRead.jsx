@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { supabase } from "../api/supabaseClient";
+import '../styles/chapter-reader.css'
 
 const ChapterRead = () => {
    const { slug, chapterSlug } = useParams();
@@ -51,7 +52,7 @@ const ChapterRead = () => {
    return (
       <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
          <Helmet>
-            <title>{chapter.title} | Real Manga</title>
+            <title className="chapter-title">{chapter.title} | Real Manga</title>
             <meta
                name="description"
                content={`"${chapter.title}" bobini o‘qing. Real Manga saytida eng so‘nggi boblar o‘zbek tilida!`}
@@ -83,8 +84,7 @@ const ChapterRead = () => {
                      alt={`Sahifa ${page.page_number}`}
                      style={{
                         width: "100%",
-                        marginBottom: "20px",
-                        borderRadius: "6px",
+                        borderRadius: "3px",
                         boxShadow: "0 2px 12px rgba(0,0,0,0.1)"
                      }}
                   />

@@ -1,21 +1,17 @@
+* {
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+}
+
 body.light {
-   background: #ffffff;
-   color: #000000;
+   background: #ffffff !important;
+   color: #000000 !important;
 }
 
 body.dark {
-   background: #1e1e1e;
-   color: #ffffff;
+   background: #1e1e1e !important;
+   color: #ffffff !important;
 }
 
-.navbar {
-   padding: 1rem 2rem;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-}
 
-.navbar a {
-   margin-left: 1rem;
-   text-decoration: none;
-}

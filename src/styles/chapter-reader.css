@@ -1,31 +1,38 @@
-.chapter-reader {
-   max-width: 800px;
+.chapter-container {
+   max-width: 1000px;
    margin: auto;
    padding: 20px;
-   color: white;
+   font-family: "Segoe UI", sans-serif;
+   color: #222;
 }
 
-.pages img {
-   width: 100%;
-   margin-bottom: 12px;
-   border-radius: 4px;
+.chapter-title {
+   font-size: 1.6rem;
+   font-weight: 600;
+   margin-bottom: 20px;
+   text-align: center;
+   color: #2c2c2c;
 }
 
-.chapter-nav {
+.chapter-pages {
    display: flex;
-   justify-content: space-between;
-   margin-top: 20px;
+   flex-direction: column;
+   align-items: center;
 }
 
-.chapter-nav a {
-   padding: 8px 16px;
-   background: #333;
-   color: white;
-   text-decoration: none;
-   border-radius: 6px;
-   transition: background 0.2s ease;
+.chapter-page-img {
+   width: 100%;
+   max-width: 100%;
+   margin: 0;
+   padding: 0;
+   border: none;
+   display: block;
+   user-select: none;
+   pointer-events: none;
+   image-rendering: auto;
 }
-
-.chapter-nav a:hover {
-   background: #444;
+@media (max-width: 300px) {
+   .chapter-title{
+      font-size: 24px;
+   }
 }
