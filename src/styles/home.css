@@ -1,0 +1,110 @@
+.home-container {
+   padding: 40px 20px;
+   max-width: 1400px;
+   margin: auto;
+}
+
+.home-title {
+   font-size: 2.2rem;
+   margin-bottom: 30px;
+   text-align: center;
+   color: #9999fd;
+   font-weight: bold;
+   position: relative;
+}
+
+.manga-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+   gap: 24px;
+   justify-items: center;
+   align-items: start;
+}
+
+.manga-card {
+   background: linear-gradient(135deg, #fefefe, #f0f0f0);
+   border-radius: 16px;
+   overflow: hidden;
+   text-decoration: none;
+   color: #333;
+   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+   width: 100%;
+   max-width: 180px;
+   display: flex;
+   flex-direction: column;
+   animation: floatIn 0.8s ease forwards;
+   position: relative;
+}
+
+.manga-card:hover {
+   transform: translateY(-6px) scale(1.03);
+   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-container {
+   width: 100%;
+   aspect-ratio: 3/4;
+   overflow: hidden;
+}
+
+.card-img-container img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   transition: transform 0.4s ease;
+}
+
+.manga-card:hover img {
+   transform: scale(1.05) rotate(1deg);
+}
+
+.card-title {
+   padding: 12px;
+   font-size: 16px;
+   font-weight: 600;
+   text-align: center;
+   background-color: #fff;
+   border-top: 1px solid #e6e6e6;
+}
+
+/* Animatsiya (noan’anaviy yengil "float in") */
+@keyframes floatIn {
+   0% {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+   }
+
+   100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+   }
+}
+
+/* Responsive grid qatorlar sonini o'zgartiradi */
+@media (max-width: 1400px) {
+   .manga-grid {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+   }
+}
+
+@media (max-width: 768px) {
+   .home-title {
+      font-size: 1.8rem;
+   }
+
+   .manga-card {
+      max-width: 160px;
+   }
+}
+
+@media (max-width: 480px) {
+   .manga-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+   }
+
+   .manga-card {
+      max-width: 100%;
+   }
+}

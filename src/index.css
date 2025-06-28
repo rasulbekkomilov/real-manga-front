@@ -1,0 +1,21 @@
+body.light {
+   background: #ffffff;
+   color: #000000;
+}
+
+body.dark {
+   background: #1e1e1e;
+   color: #ffffff;
+}
+
+.navbar {
+   padding: 1rem 2rem;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.navbar a {
+   margin-left: 1rem;
+   text-decoration: none;
+}

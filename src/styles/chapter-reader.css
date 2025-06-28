@@ -1,0 +1,31 @@
+.chapter-reader {
+   max-width: 800px;
+   margin: auto;
+   padding: 20px;
+   color: white;
+}
+
+.pages img {
+   width: 100%;
+   margin-bottom: 12px;
+   border-radius: 4px;
+}
+
+.chapter-nav {
+   display: flex;
+   justify-content: space-between;
+   margin-top: 20px;
+}
+
+.chapter-nav a {
+   padding: 8px 16px;
+   background: #333;
+   color: white;
+   text-decoration: none;
+   border-radius: 6px;
+   transition: background 0.2s ease;
+}
+
+.chapter-nav a:hover {
+   background: #444;
+}
