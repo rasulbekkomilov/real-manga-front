@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
+
+import { HelmetProvider } from "react-helmet-async";
 import { supabase } from "../api/supabaseClient";
 import '../styles/chapter-reader.css'
 
@@ -51,7 +52,7 @@ const ChapterRead = () => {
 
    return (
       <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
-         <Helmet>
+         <HelmetProvider>
             <title className="chapter-title">{chapter.title} | Real Manga</title>
             <meta
                name="description"
@@ -71,7 +72,7 @@ const ChapterRead = () => {
                content={`https://real-manga-front.vercel.app/manga/${slug}/${chapterSlug}`}
             />
             <meta name="twitter:card" content="summary_large_image" />
-         </Helmet>
+         </HelmetProvider>
 
          <h1 style={{ marginBottom: "20px" }}>{chapter.title}</h1>
 

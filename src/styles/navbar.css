@@ -1,5 +1,5 @@
 .navbar {
-   background-color: var(--navbar-bg, #ffffff);
+   background-color: rgba(0, 0, 0, 0.5);
    border-bottom: 1px solid #ddd;
    padding: 12px 20px;
    position: sticky;
@@ -19,7 +19,7 @@
    font-weight: bold;
    font-size: 1.5rem;
    text-decoration: none;
-   color: var(--text-color, #333);
+   color: var(--text-color, #fff);
 }
 
 .nav-links {
@@ -30,7 +30,7 @@
 
 .nav-links a {
    text-decoration: none;
-   color: var(--text-color, #333);
+   color: var(--text-color, #fff);
    font-weight: 500;
    transition: color 0.2s ease;
 }

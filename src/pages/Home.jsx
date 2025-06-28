@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../api/supabaseClient";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+
+import { HelmetProvider } from "react-helmet-async";
+
 import "../styles/home.css";
 
 const Home = () => {
@@ -25,7 +27,7 @@ const Home = () => {
 
    return (
       <div className="home-container">
-         <Helmet>
+         <HelmetProvider>
             <title>Real Manga | Eng so‘nggi manga va manhwa</title>
             <meta
                name="description"
@@ -39,7 +41,7 @@ const Home = () => {
             <meta property="og:image" content={mangaList[0]?.cover_url || "/default-cover.jpg"} />
             <meta property="og:url" content="https://real-manga-front.vercel.app/" />
             <meta name="twitter:card" content="summary_large_image" />
-         </Helmet>
+         </HelmetProvider>
 
          <h1 className="home-title">📚 Manga & Manhwa Kutubxonasi</h1>
 
