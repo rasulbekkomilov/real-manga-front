@@ -1,77 +1,77 @@
-.navbar {
-   background-color: rgba(0, 0, 0, 0.5);
-   border-bottom: 1px solid #ddd;
-   padding: 12px 20px;
+nav {
+   background: linear-gradient(to right, #1f1f1f, #2e2e2e);
+   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+   font-family: "Segoe UI", sans-serif;
    position: sticky;
    top: 0;
-   z-index: 1000;
+   z-index: 999;
+   transition: background 0.3s ease;
 }
 
-.navbar-container {
-   max-width: 1200px;
-   margin: auto;
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-}
-
-.logo {
-   font-weight: bold;
-   font-size: 1.5rem;
+nav a {
+   color: #f0f0f0;
    text-decoration: none;
-   color: var(--text-color, #fff);
+   font-size: 16px;
+   position: relative;
+   transition: color 0.3s ease;
 }
 
-.nav-links {
-   display: flex;
-   gap: 20px;
-   align-items: center;
+nav a:hover {
+   color: #00d9ff;
 }
 
-.nav-links a {
-   text-decoration: none;
-   color: var(--text-color, #fff);
-   font-weight: 500;
-   transition: color 0.2s ease;
+nav a::after {
+   content: '';
+   position: absolute;
+   left: 0;
+   bottom: -3px;
+   width: 0%;
+   height: 2px;
+   background: #00d9ff;
+   transition: width 0.3s ease-in-out;
 }
 
-.nav-links a:hover {
-   color: #ff5e00;
+nav a:hover::after {
+   width: 100%;
 }
 
-.theme-toggle {
-   border: none;
-   background: none;
-   font-size: 1.2rem;
+nav span {
+   color: #bbb;
+   font-size: 14px;
+   font-style: italic;
+}
+
+nav button {
+   padding: 6px 14px;
+   background: #222;
+   color: white;
+   border: 1px solid #444;
+   border-radius: 6px;
+   font-size: 14px;
    cursor: pointer;
+   transition: all 0.25s ease-in-out;
 }
 
-.hamburger {
-   display: none;
-   font-size: 1.5rem;
-   background: none;
-   border: none;
-   cursor: pointer;
+nav button:hover {
+   background: #00d9ff;
+   color: #111;
+   transform: scale(1.05);
+   box-shadow: 0 0 8px #00d9ff88;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-   .nav-links {
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      background-color: var(--navbar-bg, #fff);
+nav button:active {
+   transform: scale(0.97);
+}
+
+@media screen and (max-width: 600px) {
+   nav {
       flex-direction: column;
-      padding: 10px;
-      border: 1px solid #ccc;
-      display: none;
+      gap: 12px;
+      align-items: flex-start !important;
    }
 
-   .nav-links.open {
-      display: flex;
-   }
-
-   .hamburger {
-      display: block;
+   nav div {
+      flex-direction: column;
+      gap: 10px;
    }
 }

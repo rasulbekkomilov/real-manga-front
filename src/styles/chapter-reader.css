@@ -1,38 +1,50 @@
-.chapter-container {
-   max-width: 1000px;
-   margin: auto;
+.reader {
+   max-width: 800px;
+   margin: 0 auto;
    padding: 20px;
-   font-family: "Segoe UI", sans-serif;
-   color: #222;
+   text-align: center;
 }
 
 .chapter-title {
-   font-size: 1.6rem;
-   font-weight: 600;
+   font-size: 24px;
    margin-bottom: 20px;
-   text-align: center;
-   color: #2c2c2c;
 }
 
-.chapter-pages {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-}
-
-.chapter-page-img {
+.pages img {
    width: 100%;
-   max-width: 100%;
-   margin: 0;
-   padding: 0;
-   border: none;
-   display: block;
-   user-select: none;
-   pointer-events: none;
-   image-rendering: auto;
+   margin-bottom: 10px;
+   border-radius: 8px;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
-@media (max-width: 300px) {
-   .chapter-title{
-      font-size: 24px;
-   }
+
+.nav-buttons {
+   margin: 20px 0;
+   display: flex;
+   justify-content: space-between;
+}
+
+.nav-button {
+   padding: 8px 16px;
+   background-color: #007bff;
+   color: white;
+   text-decoration: none;
+   border-radius: 6px;
+   transition: background-color 0.3s ease;
+}
+
+.nav-button.disabled {
+   pointer-events: none;
+   opacity: 0.5;
+   background-color: #aaa;
+   cursor: not-allowed;
+}
+
+
+.nav-button:hover {
+   background-color: #0056b3;
+}
+
+.error {
+   color: red;
+   font-weight: bold;
 }

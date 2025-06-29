@@ -1,45 +1,85 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-import { HelmetProvider } from "react-helmet-async";
+import { useParams, Link } from "react-router-dom";
 import { supabase } from "../api/supabaseClient";
-import '../styles/chapter-reader.css'
+import "../styles/chapter-reader.css";
 
 const ChapterRead = () => {
    const { slug, chapterSlug } = useParams();
    const [chapter, setChapter] = useState(null);
    const [pages, setPages] = useState([]);
+   const [prevSlug, setPrevSlug] = useState(null);
+   const [nextSlug, setNextSlug] = useState(null);
    const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(null);
 
    useEffect(() => {
       const fetchChapter = async () => {
          setLoading(true);
+         setError(null);
 
+         // 1. manga_id ni olish
+         const { data: mangaData, error: mangaError } = await supabase
+            .from("manga")
+            .select("id")
+            .eq("slug", slug)
+            .maybeSingle();
+
+         if (mangaError || !mangaData) {
+            setError("Manga topilmadi.");
+            setLoading(false);
+            return;
+         }
+
+         const mangaId = mangaData.id;
+
+         // 2. Hozirgi bobni olish
          const { data: chapterData, error: chapterError } = await supabase
             .from("chapter")
             .select("*")
             .eq("slug", chapterSlug)
-            .single();
+            .eq("manga_id", mangaId)
+            .maybeSingle();
 
-         if (chapterError) {
-            console.error("❌ Bobni olishda xatolik:", chapterError.message);
+         if (chapterError || !chapterData) {
+            setError("Bob topilmadi.");
             setLoading(false);
             return;
          }
 
          setChapter(chapterData);
 
+         // 3. Sahifalarni olish
          const { data: pagesData, error: pagesError } = await supabase
             .from("chapter_pages")
-            .select("page_number, image_url")
+            .select("image_url")
             .eq("chapter_id", chapterData.id)
             .order("page_number", { ascending: true });
 
          if (pagesError) {
-            console.error("❌ Sahifalarni olishda xatolik:", pagesError.message);
+            setError("Sahifalarni yuklashda xatolik.");
          } else {
-            setPages(pagesData || []);
+            setPages(pagesData.map((p) => p.image_url));
          }
+
+         // 4. Oldingi bob
+         const { data: prev } = await supabase
+            .from("chapter")
+            .select("slug")
+            .eq("manga_id", mangaId)
+            .lt("number", chapterData.number)
+            .order("number", { ascending: false })
+            .limit(1);
+         setPrevSlug(prev?.[0]?.slug || null);
+
+         // 5. Keyingi bob
+         const { data: next } = await supabase
+            .from("chapter")
+            .select("slug")
+            .eq("manga_id", mangaId)
+            .gt("number", chapterData.number)
+            .order("number", { ascending: true })
+            .limit(1);
+         setNextSlug(next?.[0]?.slug || null);
 
          setLoading(false);
       };
@@ -47,53 +87,37 @@ const ChapterRead = () => {
       fetchChapter();
    }, [slug, chapterSlug]);
 
-   if (loading) return <p>Yuklanmoqda...</p>;
-   if (!chapter) return <p>Bob topilmadi.</p>;
+   if (loading) return <div className="reader">⏳ Yuklanmoqda...</div>;
+   if (error) return <div className="reader error">❌ {error}</div>;
 
    return (
-      <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
-         <HelmetProvider>
-            <title className="chapter-title">{chapter.title} | Real Manga</title>
-            <meta
-               name="description"
-               content={`"${chapter.title}" bobini o‘qing. Real Manga saytida eng so‘nggi boblar o‘zbek tilida!`}
-            />
-            <meta property="og:title" content={`${chapter.title} | Real Manga`} />
-            <meta
-               property="og:description"
-               content={`"${chapter.title}" bobini Real Manga’da o‘qing. Tezkor tarjimalar va yuqori sifatdagi sahifalar!`}
-            />
-            <meta
-               property="og:image"
-               content={pages[0]?.image_url || "https://real-manga-front.vercel.app/default-chapter.png"}
-            />
-            <meta
-               property="og:url"
-               content={`https://real-manga-front.vercel.app/manga/${slug}/${chapterSlug}`}
-            />
-            <meta name="twitter:card" content="summary_large_image" />
-         </HelmetProvider>
+      <div className="reader">
+         <h1 className="chapter-title">{chapter.title}</h1>
 
-         <h1 style={{ marginBottom: "20px" }}>{chapter.title}</h1>
+         <div className="pages">
+            {pages.map((url, idx) => (
+               <img key={idx} src={url} alt={`Sahifa ${idx + 1}`} loading="lazy" />
+            ))}
+         </div>
 
-         {pages.length > 0 ? (
-            <div>
-               {pages.map((page, index) => (
-                  <img
-                     key={index}
-                     src={page.image_url}
-                     alt={`Sahifa ${page.page_number}`}
-                     style={{
-                        width: "100%",
-                        borderRadius: "3px",
-                        boxShadow: "0 2px 12px rgba(0,0,0,0.1)"
-                     }}
-                  />
-               ))}
-            </div>
-         ) : (
-            <p>Sahifalar topilmadi.</p>
-         )}
+         <div className="nav-buttons">
+            <Link
+               to={prevSlug ? `/manga/${slug}/${prevSlug}` : "#"}
+               className={`nav-button ${!prevSlug ? "disabled" : ""}`}
+               onClick={(e) => !prevSlug && e.preventDefault()}
+            >
+               ⬅️ Oldingi bob
+            </Link>
+
+            <Link
+               to={nextSlug ? `/manga/${slug}/${nextSlug}` : "#"}
+               className={`nav-button ${!nextSlug ? "disabled" : ""}`}
+               onClick={(e) => !nextSlug && e.preventDefault()}
+            >
+               Keyingi bob ➡️
+            </Link>
+         </div>
+
       </div>
    );
 };

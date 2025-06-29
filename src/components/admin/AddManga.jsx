@@ -1,10 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import "../../styles/add-manga.css";
+import { useNavigate } from "react-router-dom";
 
 const genreOptions = [
-   "Action", "Adventure", "Fantasy", "Romance", "Comedy",
-   "Drama", "Horror", "Sci-Fi", "Slice of Life", "Mystery"
+   "Action", "Adventure", "Comedy", "Drama", "Fantasy",
+   "Horror", "Isekai", "Mystery", "Romance", "School Life",
+   "Sci-Fi", "Slice of Life", "Supernatural"
 ];
 
 const AddManga = () => {
@@ -12,93 +13,103 @@ const AddManga = () => {
    const [slug, setSlug] = useState("");
    const [description, setDescription] = useState("");
    const [status, setStatus] = useState("ongoing");
-   const [cover, setCover] = useState(null);
+   const [coverImage, setCoverImage] = useState(null);
    const [genres, setGenres] = useState([]);
    const [loading, setLoading] = useState(false);
 
-   const handleGenreChange = (e) => {
-      const selected = Array.from(e.target.selectedOptions).map(opt => opt.value);
-      setGenres(selected);
-   };
+   const navigate = useNavigate();
 
    const handleSubmit = async (e) => {
       e.preventDefault();
 
-      if (!title || !slug || !description || !cover || genres.length === 0) {
-         return alert("Barcha maydonlarni to‘ldiring");
+      if (!title || !slug || !description || !status || !coverImage || genres.length === 0) {
+         return alert("⚠️ Barcha maydonlarni to‘ldiring.");
       }
 
       setLoading(true);
-      try {
-         const formData = new FormData();
-         formData.append("file", cover);
-         formData.append("fileName", cover.name);
 
-         const uploadRes = await axios.post("https://upload.imagekit.io/api/v1/files/upload", formData, {
+      try {
+         // 1. Cover image yuklash
+         const formData = new FormData();
+         formData.append("file", coverImage);
+         formData.append("fileName", coverImage.name);
+
+         const imageRes = await axios.post("https://upload.imagekit.io/api/v1/files/upload", formData, {
             headers: {
                Authorization: `Basic ${btoa(import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY + ":")}`,
             },
          });
 
-         const cover_url = uploadRes.data.url;
+         const imageUrl = imageRes.data.url;
 
-         await axios.post("http://localhost:5000/api/add-manga", {
+         // 2. Backendga yuborish
+         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/add-manga`, {
             title,
             slug,
             description,
             status,
-            genres,
-            cover_url,
+            cover_url: imageUrl,
+            genres, // massiv holida yuboriladi
          });
 
-         alert("✅ Manga muvaffaqiyatli qo‘shildi");
-         setTitle("");
-         setSlug("");
-         setDescription("");
-         setStatus("ongoing");
-         setCover(null);
-         setGenres([]);
+         alert("✅ Manga muvaffaqiyatli qo‘shildi!");
+         navigate("/admin");
       } catch (err) {
-         console.error(err);
-         alert("❌ Xatolik yuz berdi.");
+         console.error("❌ Xatolik:", err);
+         alert("❌ Manga qo‘shishda xatolik yuz berdi.");
       } finally {
          setLoading(false);
       }
    };
 
+   const handleGenreChange = (e) => {
+      const { value, checked } = e.target;
+      if (checked) {
+         setGenres([...genres, value]);
+      } else {
+         setGenres(genres.filter((g) => g !== value));
+      }
+   };
+
    return (
       <div className="admin-form">
-         <h2>📚 Yangi manga qo‘shish</h2>
+         <h2>➕ Yangi Manga qo‘shish</h2>
          <form onSubmit={handleSubmit}>
-            <label>Nomi:</label>
+            <label>Manga nomi:</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
 
-            <label>Slug (URL uchun):</label>
+            <label>Slug:</label>
             <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} required />
 
-            <label>Tavsifi:</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows="4" />
+            <label>Izoh:</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
 
             <label>Status:</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)}>
-               <option value="ongoing">Ongoing</option>
-               <option value="completed">Completed</option>
+            <select value={status} onChange={(e) => setStatus(e.target.value)} required>
+               <option value="ongoing">Davom etmoqda</option>
+               <option value="completed">Yakunlangan</option>
             </select>
 
-            <label>Janr(lar):</label>
-            <select multiple value={genres} onChange={handleGenreChange}>
+            <label>Janrlar:</label>
+            <div className="genres-checkboxes">
                {genreOptions.map((genre) => (
-                  <option key={genre} value={genre}>
+                  <label key={genre}>
+                     <input
+                        type="checkbox"
+                        value={genre}
+                        checked={genres.includes(genre)}
+                        onChange={handleGenreChange}
+                     />
                      {genre}
-                  </option>
+                  </label>
                ))}
-            </select>
+            </div>
 
-            <label>Cover rasmi:</label>
-            <input type="file" accept="image/*" onChange={(e) => setCover(e.target.files[0])} />
+            <label>Cover rasm:</label>
+            <input type="file" accept="image/*" onChange={(e) => setCoverImage(e.target.files[0])} required />
 
             <button type="submit" disabled={loading}>
-               {loading ? "⏳ Yuklanmoqda..." : "Qo‘shish"}
+               {loading ? "⏳ Yuklanmoqda..." : "📤 Manga qo‘shish"}
             </button>
          </form>
       </div>

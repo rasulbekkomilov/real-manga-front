@@ -1,31 +1,61 @@
-import { Link } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
-import { useState } from "react";
-import "../styles/navbar.css";
+// components/Navbar.jsx
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { supabase } from "../api/supabaseClient";
+import '../styles/navbar.css'
 
 const Navbar = () => {
-   const { theme, toggleTheme } = useTheme();
-   const [isOpen, setIsOpen] = useState(false);
+   const { user, setUser, isAdmin } = useAuth();
+   const navigate = useNavigate();
+
+   const handleLogout = async () => {
+      await supabase.auth.signOut();
+      setUser(null);
+   };
 
    return (
-      <nav className="navbar">
-         <div className="navbar-container">
-            <Link to="/" className="logo">
-               <span>📖 RealManga</span>
-            </Link>
+      <nav style={{
+         padding: "10px 20px",
+         display: "flex",
+         justifyContent: "space-between",
+         alignItems: "center"
+      }}>
+         <Link to="/" style={{ fontWeight: "bold", fontSize: "22px" }}>RealManga</Link>
 
-            <div className={`nav-links ${isOpen ? "open" : ""}`}>
-               <Link to="/">Bosh sahifa</Link>
-               <Link to="/login">Kirish</Link>
-               <Link to="/signup">Ro‘yxatdan o‘tish</Link>
-               <button onClick={toggleTheme} className="theme-toggle">
-                  {theme === "dark" ? "🌞" : "🌙"}
-               </button>
-            </div>
+         <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+            {!user ? (
+               <>
+                  <Link to="/login">Kirish</Link>
+                  <Link to="/signup">Ro‘yxatdan o‘tish</Link>
+               </>
+            ) : (
+               <>
+                  <span>{user.email}</span>
 
-            <button className="hamburger" onClick={() => setIsOpen(!isOpen)}>
-               ☰
-            </button>
+                  {isAdmin && (
+                     <button
+                        onClick={() => navigate("/admin")}
+                        style={{
+                           padding: "6px 12px",
+                           background: "#444",
+                           color: "white",
+                           border: "none",
+                           borderRadius: "6px",
+                           cursor: "pointer"
+                        }}
+                     >
+                        Admin
+                     </button>
+                  )}
+
+                  <button
+                     onClick={handleLogout}
+                     style={{ padding: "6px 12px", cursor: "pointer" }}
+                  >
+                     Chiqish
+                  </button>
+               </>
+            )}
          </div>
       </nav>
    );

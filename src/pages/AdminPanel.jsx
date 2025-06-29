@@ -13,6 +13,8 @@ const AdminPanel = () => {
             <Link to="/admin/add-chapter" className="admin-btn">
                📘 Bob qo‘shish
             </Link>
+            <Link to="/admin/add-hot-update">🔥 Hot Update qo‘shish</Link>
+
 
             {/* Keyinchalik tahrirlash, o‘chirish funksiyalari qo‘shiladi */}
          </div>

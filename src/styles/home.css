@@ -1,101 +1,122 @@
-.home-container {
-   max-width: 1600px;
+/* Umumiy sahifa konteyneri */
+.home-page {
+   padding: 30px 16px;
+   max-width: 1200px;
    margin: 0 auto;
-   padding: 40px 20px;
-   font-family: 'Segoe UI', sans-serif;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   color: #222;
 }
 
-.home-title {
-   font-size: 36px;
+/* HOT UPDATES */
+.hot-updates {
+   margin-bottom: 50px;
+}
+
+.hot-updates h2 {
+   font-size: 24px;
+   color: #ff4747;
+   margin-bottom: 20px;
+   font-weight: 700;
    text-align: center;
-   margin-bottom: 40px;
-   color: #333;
 }
 
-/* Grid: har qator 6ta card */
-.manga-grid {
+/* HOT GRID */
+.hot-grid {
    display: grid;
-   grid-template-columns: repeat(6, 1fr);
-   gap: 20px;
+   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+   gap: 16px;
 }
 
-/* Card */
-.manga-card {
-   background-color: #ffffff;
+/* HOT CARD */
+.hot-card {
+   background: #fff;
    border-radius: 10px;
    overflow: hidden;
    text-decoration: none;
-   color: #222;
-   transition: transform 0.3s ease, box-shadow 0.3s ease;
-   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
-   display: flex;
-   flex-direction: column;
-   height: 100%;
+   color: #000;
+   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+   transition: transform 0.2s ease;
 }
 
-.manga-card:hover {
-   transform: translateY(-4px);
-   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.12);
+.hot-card:hover {
+   transform: translateY(-3px);
 }
 
-/* Cover rasm */
-.card-img-container {
+.hot-card img {
    width: 100%;
-   height: 300px;
-   overflow: hidden;
-   flex-shrink: 0;
-}
-
-.card-img-container img {
-   width: 100%;
-   height: 100%;
+   height: 160px;
    object-fit: cover;
-   /* Rasm siqilmasdan, to‘liq ko‘rinadi */
-   display: block;
+}
+
+.hot-card p {
+   padding: 10px;
+   font-size: 14px;
+   font-weight: bold;
+   text-align: center;
+}
+
+/* FULL MANGA LIST */
+.full-list h2 {
+   font-size: 24px;
+   color: #333;
+   margin-bottom: 20px;
+   text-align: center;
+}
+
+/* MANGA GRID */
+.manga-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+   gap: 20px;
+}
+
+/* MANGA CARD */
+.manga-card {
+   background-color: rgba(0, 0, 0, 0.7);
+   border-radius: 10px;
+   overflow: hidden;
+   text-decoration: none;
+   color: #000;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
    transition: transform 0.3s ease;
 }
 
-.manga-card:hover .card-img-container img {
-   transform: scale(1.03);
+.manga-card:hover {
+   transform: translateY(-6px);
 }
 
-/* Title */
-.card-title {
-   padding: 10px 8px;
-   font-size: 16px;
-   font-weight: 600;
+.manga-card .cover {
+   position: relative;
+}
+
+.manga-card img {
+   width: 100%;
+   height: 260px;
+   object-fit: cover;
+   display: block;
+}
+
+.manga-card .overlay {
+   position: absolute;
+   bottom: 40px;
+   background: rgba(0, 0, 0, 0.6);
+   color: white;
+   width: 100%;
    text-align: center;
-   background-color: #f8f8f8;
-   border-top: 1px solid #eee;
+   padding: 6px 0;
+   font-size: 16px;
+   opacity: 0;
+   transition: opacity 0.3s ease;
 }
 
-/* Responsive (mobilga moslashuvchan) */
-@media (max-width: 1400px) {
-   .manga-grid {
-      grid-template-columns: repeat(5, 1fr);
-   }
+.manga-card:hover .overlay {
+   opacity: 1;
 }
 
-@media (max-width: 1200px) {
-   .manga-grid {
-      grid-template-columns: repeat(4, 1fr);
-   }
-}
-
-@media (max-width: 900px) {
-   .manga-grid {
-      grid-template-columns: repeat(3, 1fr);
-   }
-}
-
-@media (max-width: 600px) {
-   .manga-grid {
-      grid-template-columns: repeat(2, 1fr);
-   }
-}
-
-@media (max-width: 400px) {
-   .manga-grid {
-      grid-template-columns: repeat(1, 1fr);
-   }
+.manga-card h3 {
+   color: #fff;
+   padding: 10px 0px;
+   font-size: 16px;
+   text-align: center;
+   font-weight: 600;
 }

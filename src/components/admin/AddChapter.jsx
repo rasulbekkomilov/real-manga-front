@@ -12,9 +12,9 @@ const AddChapter = () => {
    const [chapterNumber, setChapterNumber] = useState("");
    const [images, setImages] = useState([]);
    const [loading, setLoading] = useState(false);
-
    const navigate = useNavigate();
 
+   // Manga ro'yxatini olish
    useEffect(() => {
       const fetchManga = async () => {
          const { data, error } = await supabase.from("manga").select("id, title");
@@ -27,6 +27,7 @@ const AddChapter = () => {
       fetchManga();
    }, []);
 
+   // Formani yuborish
    const handleSubmit = async (e) => {
       e.preventDefault();
 
@@ -36,6 +37,7 @@ const AddChapter = () => {
 
       setLoading(true);
       try {
+         // Rasmlarni ImageKit orqali yuklash
          const uploadedUrls = [];
 
          for (const image of images) {
@@ -52,8 +54,8 @@ const AddChapter = () => {
             uploadedUrls.push(res.data.url);
          }
 
-         // Backendga POST yuborish
-         const response = await axios.post("http://localhost:5000/api/add-chapter", {
+         // Backendga POST so‘rovi
+         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/add-chapter`, {
             manga_id: selectedManga,
             chapter_title: chapterTitle,
             chapter_slug: chapterSlug,
@@ -61,16 +63,17 @@ const AddChapter = () => {
             image_urls: uploadedUrls,
          });
 
-         console.log("✅ Backenddan javob:", response.data);
-
+         console.log("✅ Bob qo‘shildi:", response.data);
          alert("✅ Bob muvaffaqiyatli qo‘shildi!");
+
+         // Tozalash va qaytish
          setChapterTitle("");
          setChapterSlug("");
          setChapterNumber("");
          setImages([]);
          navigate("/admin");
       } catch (err) {
-         console.error("❌ Bob qo‘shishda xatolik:", err);
+         console.error("❌ Xatolik:", err);
          alert("❌ Bob qo‘shishda xatolik yuz berdi.");
       } finally {
          setLoading(false);
@@ -123,7 +126,7 @@ const AddChapter = () => {
                required
             />
 
-            <label htmlFor="images">Bob sahifa rasmlari:</label>
+            <label htmlFor="images">Bob sahifalari (rasmlar):</label>
             <input
                id="images"
                type="file"

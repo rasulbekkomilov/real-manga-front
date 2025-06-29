@@ -61,7 +61,7 @@ const MangaPage = () => {
                {manga.genres && (
                   <div className="manga-genres">
                      {manga.genres.map((genre, i) => (
-                        <span key={i} className="genre-badge">#{genre}</span>
+                        <span key={i} className="genre-badge">{genre}</span>
                      ))}
                   </div>
                )}
@@ -77,8 +77,7 @@ const MangaPage = () => {
                      key={chapter.id}
                      className="chapter-card"
                   >
-                     <div className="chapter-number">Bob {chapter.number}</div>
-                     <div className="chapter-title">{chapter.title}</div>
+                     <p className="chapter-title">{chapter.title}</p>
                   </Link>
                ))
             ) : (

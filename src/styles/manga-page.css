@@ -30,7 +30,7 @@
 .manga-description {
    margin-bottom: 15px;
    line-height: 1.6;
-   color: #444;
+   color: #fff;
 }
 
 .manga-genres {
@@ -61,7 +61,7 @@
    background: #fff;
    border: 1px solid #bbb;
    border-radius: 10px;
-   padding: 12px 16px;
+   padding-top: 10px;
    width: calc(33.333% - 12px);
    min-width: 180px;
    text-decoration: none;

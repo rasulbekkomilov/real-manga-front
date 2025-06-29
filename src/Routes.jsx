@@ -8,6 +8,7 @@ import MangaPage from "./pages/MangaPage";
 import AddChapter from './components/admin/AddChapter';
 import AddManga from './components/admin/AddManga';
 import ChapterRead from './pages/ChapterRead';
+import AddHotUpdate from "./components/admin/add-hot-update";
 
 const AppRoutes = () => {
    return (
@@ -29,6 +30,7 @@ const AppRoutes = () => {
          />
          <Route path="/admin/add-manga" element={<AddManga />} />
          <Route path="/admin/add-chapter" element={<AddChapter />} />
+         <Route path="/admin/add-hot-update" element={<AddHotUpdate />} />
       </Routes>
    );
 };

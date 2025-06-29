@@ -8,10 +8,7 @@ export const getChapterBySlug = async (slug) => {
       id,
       number,
       slug,
-      manga (
-        title
-      )
-    `)
+      manga (title)`)
       .eq("slug", slug)
       .single();
 
